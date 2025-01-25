@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do Web App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 text-white flex items-center justify-center min-h-screen">
+  <div class="w-96">
+    <h1 class="text-3xl font-bold text-center mb-6">To-Do App</h1>
+    <div class="mb-4">
+      <input type="text" id="taskInput" placeholder="Add a new task..." class="w-full p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <button id="addTask" class="mt-2 w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded">Add Task</button>
+    </div>
+    <ul id="taskList" class="space-y-2">
+      <!-- Tasks will be dynamically added here -->
+    </ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById('taskInput');
+    const addTaskButton = document.getElementById('addTask');
+    const taskList = document.getElementById('taskList');
+
+    // Function to create a task item
+    function createTask(taskText) {
+      const taskItem = document.createElement('li');
+      taskItem.className = 'flex justify-between items-center bg-gray-700 p-2 rounded';
+
+      const taskLabel = document.createElement('span');
+      taskLabel.textContent = taskText;
+      taskLabel.className = 'flex-grow';
+
+      const dateInput = document.createElement('input');
+      dateInput.type = 'datetime-local';
+      dateInput.className = 'mr-2 p-1 rounded bg-gray-600 text-white';
+
+      const completeButton = document.createElement('button');
+      completeButton.textContent = '✔';
+      completeButton.className = 'bg-green-600 hover:bg-green-500 text-white py-1 px-2 rounded mr-2';
+      completeButton.addEventListener('click', () => {
+        taskLabel.classList.toggle('line-through');
+      });
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = '✖';
+      deleteButton.className = 'bg-red-600 hover:bg-red-500 text-white py-1 px-2 rounded';
+      deleteButton.addEventListener('click', () => {
+        taskItem.remove();
+      });
+
+      taskItem.appendChild(taskLabel);
+      taskItem.appendChild(dateInput);
+      taskItem.appendChild(completeButton);
+      taskItem.appendChild(deleteButton);
+      taskList.appendChild(taskItem);
+    }
+
+    // Add task event
+    addTaskButton.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        createTask(taskText);
+        taskInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
