@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1E293B;
+            color: #F8FAFC;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="bg-gray-800 rounded-lg shadow-xl p-6 text-center">
+        <h1 class="text-2xl font-bold mb-4">Stopwatch</h1>
+        <div id="display" class="text-4xl font-mono mb-6">00:00:00</div>
+        <div class="flex justify-center space-x-4 mb-4">
+            <button id="start-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Start</button>
+            <button id="pause-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Pause</button>
+            <button id="reset-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Reset</button>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">Laps</h2>
+        <ul id="laps" class="list-decimal text-left bg-gray-700 p-4 rounded h-48 overflow-y-auto">
+            <!-- Lap times will appear here -->
+        </ul>
+        <button id="lap-btn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Record Lap</button>
+    </div>
+
+    <script>
+        let timer;
+        let elapsedSeconds = 0;
+        const display = document.getElementById('display');
+        const laps = document.getElementById('laps');
+
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${hrs}:${mins}:${secs}`;
+        }
+
+        function updateDisplay() {
+            display.textContent = formatTime(elapsedSeconds);
+        }
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            if (!timer) {
+                timer = setInterval(() => {
+                    elapsedSeconds++;
+                    updateDisplay();
+                }, 1000);
+            }
+        });
+        document.getElementById('pause-btn').addEventListener('click', () => {
+            clearInterval(timer);
+            timer = null;
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            clearInterval(timer);
+            timer = null;
+            elapsedSeconds = 0;
+            updateDisplay();
+            laps.innerHTML = '';
+        });
+
+        document.getElementById('lap-btn').addEventListener('click', () => {
+            const lapTime = formatTime(elapsedSeconds);
+            const lapItem = document.createElement('li');
+            lapItem.textContent = lapTime;
+            laps.appendChild(lapItem);
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
